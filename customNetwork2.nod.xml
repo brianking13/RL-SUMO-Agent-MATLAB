@@ -1,0 +1,22 @@
+<nodes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.9" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/nodes_file.xsd">
+    <location netOffset="0.00,0.00" convBoundary="0.00,0.00,17000.00,0.00" origBoundary="-10000000000.00,-10000000000.00,10000000000.00,10000000000.00" projParameter="!" />
+
+    <node id="J0" x="0.00" y="0.00" type="dead_end" />
+    <node id="J1" x="1027" y="0.00" type="traffic_light" tl="J1" />
+    <node id="J10" x="10060" y="0.00" type="traffic_light" tl="J10" />
+    <node id="J11" x="11094" y="0.00" type="traffic_light" tl="J11" />
+    <node id="J12" x="11934" y="0.00" type="traffic_light" tl="J12" />
+    <node id="J13" x="12974" y="0.00" type="traffic_light" tl="J13" />
+    <node id="J14" x="14081" y="0.00" type="traffic_light" tl="J14" />
+    <node id="J15" x="15127" y="0.00" type="traffic_light" tl="J15" />
+    <node id="J16" x="16195" y="0.00" type="traffic_light" tl="J16" />
+    <node id="J17" x="17000.00" y="0.00" type="dead_end" />
+    <node id="J2" x="2155" y="0.00" type="traffic_light" tl="J2" />
+    <node id="J3" x="3006" y="0.00" type="traffic_light" tl="J3" />
+    <node id="J4" x="4117" y="0.00" type="traffic_light" tl="J4" />
+    <node id="J5" x="5165" y="0.00" type="traffic_light" tl="J5" />
+    <node id="J6" x="6125" y="0.00" type="traffic_light" tl="J6" />
+    <node id="J7" x="6902" y="0.00" type="traffic_light" tl="J7" />
+    <node id="J8" x="7816" y="0.00" type="traffic_light" tl="J8" />
+    <node id="J9" x="9094" y="0.00" type="traffic_light" tl="J9" />
+</nodes>

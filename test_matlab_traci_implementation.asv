@@ -1,0 +1,8 @@
+% Call a short script to run my SUMO environment for 1 time step
+% pyversion('C:/Users/bking/anaconda3/python')
+
+% env = py.importlib.import_module('run_traci_from_matlab');
+
+
+% Run simple function for vehicle to drive to the first intersection
+% py.run_traci_from_matlab.run_veh(10)
