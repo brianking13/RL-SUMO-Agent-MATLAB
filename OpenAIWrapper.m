@@ -11,7 +11,7 @@ classdef OpenAIWrapper < rl.env.MATLABEnvironment
 
     function this = OpenAIWrapper()
         disp('OpenAIWrapper')
-      ObservationInfo = rlNumericSpec([5 1]);
+      ObservationInfo = rlNumericSpec([7 1]);
       ObservationInfo.Name = 'VehicleObservation';
 %       ObservationInfo.Description = 'Position, Velocity, Angle, VelocityAtTip';
       ActionInfo = rlFiniteSetSpec([0:48]);
@@ -24,7 +24,7 @@ classdef OpenAIWrapper < rl.env.MATLABEnvironment
       result = this.open_env.step(int16(Action)); 
       disp(Action)
       obs = result{1};
-      Observation =[obs{1},obs{2},obs{3},double(obs{4}),obs{5}];
+      Observation =[obs{1},obs{2},obs{3},double(obs{4}),obs{5},obs{6},obs{7}];
       Reward = result{2};
       IsDone = result{3};
       LoggedSignals = [];
@@ -33,7 +33,7 @@ classdef OpenAIWrapper < rl.env.MATLABEnvironment
     function InitialObservation = reset(this)
         disp('Reset')
       r = this.open_env.reset();
-      result = [r{1},r{2},r{3},double(r{4}),r{5}];
+      result = [r{1},r{2},r{3},double(r{4}),r{5},r{6},r{7}];
       InitialObservation =result;
       disp('end reset')
     end

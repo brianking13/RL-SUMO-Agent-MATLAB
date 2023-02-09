@@ -1,83 +1,83 @@
 <tlLogics xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.9" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/tllogic_file.xsd">
-    <tlLogic id="J1" type="static" programID="0" offset="13">
-        <phase duration="17" state="GG" />
-        <phase duration=".1" state="yy" />
-        <phase duration="43" state="rr" />
-    </tlLogic>
-    <tlLogic id="J10" type="static" programID="0" offset="53">
-        <phase duration="13" state="GG" />
-        <phase duration="0.10" state="yy" />
-        <phase duration="47" state="rr" />
-    </tlLogic>
-    <tlLogic id="J11" type="static" programID="0" offset="56">
-        <phase duration="39" state="GG" />
-        <phase duration="0.10" state="yy" />
-        <phase duration="21" state="rr" />
-    </tlLogic>
-    <tlLogic id="J12" type="static" programID="0" offset="41">
-        <phase duration="46" state="GG" />
-        <phase duration="0.10" state="yy" />
-        <phase duration="14" state="rr" />
-    </tlLogic>
-    <tlLogic id="J13" type="static" programID="0" offset="28">
-        <phase duration="47" state="GG" />
-        <phase duration="0.10" state="yy" />
-        <phase duration="13" state="rr" />
-    </tlLogic>
-    <tlLogic id="J14" type="static" programID="0" offset="36">
-        <phase duration="36" state="GG" />
-        <phase duration="0.10" state="yy" />
-        <phase duration="24" state="rr" />
-    </tlLogic>
-    <tlLogic id="J15" type="static" programID="0" offset="28">
-        <phase duration="29" state="GG" />
-        <phase duration="0.10" state="yy" />
-        <phase duration="31" state="rr" />
-    </tlLogic>
-    <tlLogic id="J16" type="static" programID="0" offset="25">
-        <phase duration="10" state="GG" />
-        <phase duration="0.10" state="yy" />
-        <phase duration="50" state="rr" />
-    </tlLogic>
-    <tlLogic id="J2" type="static" programID="0" offset="8">
-        <phase duration="24" state="GG" />
-        <phase duration=".1" state="yy" />
-        <phase duration="36" state="rr" />
-    </tlLogic>
-    <tlLogic id="J3" type="static" programID="0" offset="49">
-        <phase duration="47" state="GG" />
-        <phase duration=".1" state="yy" />
-        <phase duration="13" state="rr" />
-    </tlLogic>
-    <tlLogic id="J4" type="static" programID="0" offset="2">
-        <phase duration="27" state="GG" />
-        <phase duration=".1" state="yy" />
-        <phase duration="33" state="rr" />
-    </tlLogic>
-    <tlLogic id="J5" type="static" programID="0" offset="56">
-        <phase duration="22" state="GG" />
-        <phase duration="0.10" state="yy" />
-        <phase duration="38" state="rr" />
-    </tlLogic>
-    <tlLogic id="J6" type="static" programID="0" offset="29">
-        <phase duration="21" state="GG" />
-        <phase duration="0.10" state="yy" />
-        <phase duration="39" state="rr" />
-    </tlLogic>
-    <tlLogic id="J7" type="static" programID="0" offset="10">
-        <phase duration="44" state="GG" />
-        <phase duration="0.10" state="yy" />
-        <phase duration="16" state="rr" />
-    </tlLogic>
-    <tlLogic id="J8" type="static" programID="0" offset="29">
+    <tlLogic id="J1" type="static" programID="0" offset="52">
         <phase duration="23" state="GG" />
-        <phase duration="0.10" state="yy" />
+        <phase duration="3" state="yy" />
         <phase duration="37" state="rr" />
     </tlLogic>
-    <tlLogic id="J9" type="static" programID="0" offset="38">
-        <phase duration="46" state="GG" />
-        <phase duration="0.10" state="yy" />
-        <phase duration="14" state="rr" />
+    <tlLogic id="J10" type="static" programID="0" offset="9">
+        <phase duration="32" state="GG" />
+        <phase duration="3" state="yy" />
+        <phase duration="28" state="rr" />
+    </tlLogic>
+    <tlLogic id="J11" type="static" programID="0" offset="42">
+        <phase duration="38" state="GG" />
+        <phase duration="3" state="yy" />
+        <phase duration="22" state="rr" />
+    </tlLogic>
+    <tlLogic id="J12" type="static" programID="0" offset="26">
+        <phase duration="34" state="GG" />
+        <phase duration="3" state="yy" />
+        <phase duration="26" state="rr" />
+    </tlLogic>
+    <tlLogic id="J13" type="static" programID="0" offset="13">
+        <phase duration="12" state="GG" />
+        <phase duration="3" state="yy" />
+        <phase duration="48" state="rr" />
+    </tlLogic>
+    <tlLogic id="J14" type="static" programID="0" offset="8">
+        <phase duration="34" state="GG" />
+        <phase duration="3" state="yy" />
+        <phase duration="26" state="rr" />
+    </tlLogic>
+    <tlLogic id="J15" type="static" programID="0" offset="17">
+        <phase duration="48" state="GG" />
+        <phase duration="3" state="yy" />
+        <phase duration="12" state="rr" />
+    </tlLogic>
+    <tlLogic id="J16" type="static" programID="0" offset="22">
+        <phase duration="28" state="GG" />
+        <phase duration="3" state="yy" />
+        <phase duration="32" state="rr" />
+    </tlLogic>
+    <tlLogic id="J2" type="static" programID="0" offset="11">
+        <phase duration="13" state="GG" />
+        <phase duration=".1" state="yy" />
+        <phase duration="47" state="rr" />
+    </tlLogic>
+    <tlLogic id="J3" type="static" programID="0" offset="5">
+        <phase duration="38" state="GG" />
+        <phase duration=".1" state="yy" />
+        <phase duration="22" state="rr" />
+    </tlLogic>
+    <tlLogic id="J4" type="static" programID="0" offset="3">
+        <phase duration="35" state="GG" />
+        <phase duration=".1" state="yy" />
+        <phase duration="25" state="rr" />
+    </tlLogic>
+    <tlLogic id="J5" type="static" programID="0" offset="26">
+        <phase duration="44" state="GG" />
+        <phase duration="3" state="yy" />
+        <phase duration="16" state="rr" />
+    </tlLogic>
+    <tlLogic id="J6" type="static" programID="0" offset="55">
+        <phase duration="26" state="GG" />
+        <phase duration="3" state="yy" />
+        <phase duration="34" state="rr" />
+    </tlLogic>
+    <tlLogic id="J7" type="static" programID="0" offset="25">
+        <phase duration="39" state="GG" />
+        <phase duration="3" state="yy" />
+        <phase duration="21" state="rr" />
+    </tlLogic>
+    <tlLogic id="J8" type="static" programID="0" offset="6">
+        <phase duration="27" state="GG" />
+        <phase duration="3" state="yy" />
+        <phase duration="33" state="rr" />
+    </tlLogic>
+    <tlLogic id="J9" type="static" programID="0" offset="20">
+        <phase duration="50" state="GG" />
+        <phase duration="3" state="yy" />
+        <phase duration="10" state="rr" />
     </tlLogic>
 
     <connection from="-E1" to="-E0" fromLane="0" toLane="0" tl="J1" linkIndex="0" />

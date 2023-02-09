@@ -15,14 +15,14 @@ except:
     pass
 
 x= []
-for i in range(1,20):
+for i in range(1,30):
         
     visualize = True
     env_base = VehEnv(visualize)
     env_base.reset()
     
     # run simulation for 800 steps (1 step = 1 second)
-    for i in range(400):
+    for i in range(500):
         env_base.step_constantSpeed(20)
         
     plt.plot(env_base.get_speeds())

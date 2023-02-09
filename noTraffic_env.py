@@ -50,7 +50,7 @@ class VehEnv(Env):
             self.action_space = Discrete(48)
             
             #observations
-            self.observation_space = Box(low=np.array([0,0,0,0,0]),high=np.array([1,1,1,1,1]))
+            self.observation_space = Box(low=np.array([0,0,0,0,0,0,0]),high=np.array([1,1,1,1,1,1,1]))
             
             # intialize parameters
             self.fuel_consumption = []
@@ -85,15 +85,31 @@ class VehEnv(Env):
            time = 0
            for i in range(1,5000):
                traci.simulationStep()
+               intersection=False
                self.state, sec_reward, done, info,intersection = self.InterStep(action)
                time +=1
                if done == True:
                    break
+              
                # accumulate the reward over time
                reward = reward + sec_reward
                if intersection == True:
                    break
-         
+        
+        # find current and upcoming lane id's
+        current_lane = traci.vehicle.getLaneID('v_0')
+        
+        # find number of vehicles moving along upcoming stretch of corridor
+        number_vehicles_upcoming = traci.lane.getLastStepVehicleNumber(current_lane)-1
+        # find mean speed of vehicles moving along upcoming stretch of corridor
+        mean_lane_speed = traci.lane.getLastStepMeanSpeed(current_lane)
+        # print('Upcoming Lane Car Number',number_vehicles_upcoming)
+        # print('Lane Speed:', mean_lane_speed)
+        
+        self.state[len(self.state)-2] = number_vehicles_upcoming/20  
+        self.state[len(self.state)-1] = mean_lane_speed/20
+        
+        
         return self.state, reward/time, done, info
              
     
@@ -168,6 +184,7 @@ class VehEnv(Env):
         # find all positive gaps
         pos_intersection_distances = [i for i in intersection_distances if i > 0]
         
+  
         # find distance to closest intersection
         gap = min(pos_intersection_distances)
         
@@ -186,6 +203,8 @@ class VehEnv(Env):
             phase = 1
         
         previous_gap = self.state[1]*1000
+        
+        intersection = False
         if gap > previous_gap:
             # print('reached intersection')
             intersection = True
@@ -199,13 +218,13 @@ class VehEnv(Env):
         else:
             green_light_time = 1-phase_duration/60
 
-        self.state=[v/self.max_speed,gap/1000,phase_time/100,phase,green_light_time]
-
+        self.state=[v/self.max_speed,gap/1000,phase_time/100,phase,green_light_time,0,0]
+      
         # if self.sim_length <= 0 or vehicle_list == [] or traci.simulation.getTime() > 400:
         # when testing, set the sim to terminate at 8000 meters instead of at a red light
-        if gap < 15 and pos[0] > 8000:
-            print('MADE IT FAR!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-            self.reset()
+        # if gap < 15 and pos[0] > 8000:
+        #     print('MADE IT FAR!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+        #     # self.reset()
         if v < 5 and accel>0 :
         # if  traci.simulation.getTime()>500:
             done = True
@@ -218,6 +237,7 @@ class VehEnv(Env):
         info = {}
         
         return self.state, reward, done, info, intersection
+
     
     
     
@@ -338,13 +358,23 @@ class VehEnv(Env):
                         phase.attrib['duration'] = str(red)
         tree.write('customNetwork2.tll.xml')   
                    
-     
+        # edit traffic demand each run
+        tree = ET.parse('routingCustom.rou.xml')
+        root = tree.getroot()
+        for nodes in root.iter('routes'):
+            for flow in root.iter('flow'):
+                number_cars =str(random.randint(0,1))
+                # number_cars = "1"
+                flow.attrib['number'] = number_cars
+        tree.write('routingCustom.rou.xml')
+        
+        
         os.system('netconvert --node-files=customNetwork2.nod.xml --edge-files=customNetwork2.edg.xml \
                   --connection-files=customNetwork2.con.xml  \
                       --tllogic-files=customNetwork2.tll.xml  \
           --output-file=customNetwork2.net.xml')
           
-        traci.start([sumoBinary, "-n", "customNetwork2.net.xml", "-r", "routingLarge.rou.xml", "--start", "--quit-on-end"])
+        traci.start([sumoBinary, "-n", "customNetwork2.net.xml", "-r", "routingCustom.rou.xml", "--start", "--quit-on-end"])
         
         
         traci.simulationStep()
@@ -365,7 +395,7 @@ class VehEnv(Env):
         traci.vehicle.setMaxSpeed('v_0',self.max_speed)
         v = traci.vehicle.getSpeed('v_0')
 
-        self.state=[v/self.max_speed,0,0,0,0]
+        self.state=[v/self.max_speed,0,0,0,0,0,0]
         
         self.step(20)
 
