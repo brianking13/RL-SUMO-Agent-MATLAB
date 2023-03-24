@@ -7,22 +7,24 @@
     
     <vehicle id="v_0" depart="0.00" route="r_0" color="0,24,255" type="vehType" />
     <flow id="f_0" begin="0" from="E2" to="E16" end="1.00" number="0" type="standard" />
-    <flow id="f_1" begin="0" from="E3" to="E16" end="1.00" number="0" type="standard" />
-    <flow id="f_2" begin="0" from="E4" to="E16" end="1.00" number="0" type="standard" />
+    <flow id="f_1" begin="0" from="E3" to="E16" end="1.00" number="1" type="standard" />
+    <flow id="f_2" begin="0" from="E4" to="E16" end="1.00" number="1" type="standard" />
     <flow id="f_3" begin="0" from="E5" to="E16" end="1.00" number="1" type="standard" />
     <flow id="f_4" begin="0" from="E6" to="E16" end="1.00" number="0" type="standard" />
-    <flow id="f_5" begin="0" from="E7" to="E16" end="1.00" number="0" type="standard" />
+    <flow id="f_5" begin="0" from="E7" to="E16" end="1.00" number="1" type="standard" />
     <flow id="f_6" begin="0" from="E8" to="E16" end="1.00" number="0" type="standard" />
     <flow id="f_7" begin="0" from="E9" to="E16" end="1.00" number="0" type="standard" />
     <flow id="f_8" begin="0" from="E10" to="E16" end="1.00" number="1" type="standard" />
-    <flow id="f_9" begin="0" from="E11" to="E16" end="1.00" number="0" type="standard" />
-    <flow id="f_10" begin="0" from="E0" to="E16" end="1.00" number="1" type="standard" departPos="100" />
+    <flow id="f_9" begin="0" from="E11" to="E16" end="1.00" number="1" type="standard" />
+    <flow id="f_10" begin="0" from="E0" to="E16" end="1.00" number="0" type="standard" departPos="100" />
     <flow id="f_11" begin="0" from="E0" to="E16" end="1.00" number="0" type="standard" departPos="200" />
-    <flow id="f_12" begin="0" from="E0" to="E16" end="1.00" number="0" type="standard" departPos="300" />
-    <flow id="f_13" begin="0" from="E0" to="E16" end="1.00" number="0" type="standard" departPos="400" />
-    <flow id="f_14" begin="0" from="E0" to="E16" end="1.00" number="1" type="standard" departPos="500" />
-    <flow id="f_15" begin="0" from="E0" to="E16" end="1.00" number="1" type="standard" departPos="600" />
+    <flow id="f_12" begin="0" from="E0" to="E16" end="1.00" number="1" type="standard" departPos="300" />
+    <flow id="f_13" begin="0" from="E0" to="E16" end="1.00" number="1" type="standard" departPos="400" />
+    <flow id="f_14" begin="0" from="E0" to="E16" end="1.00" number="0" type="standard" departPos="500" />
+    <flow id="f_15" begin="0" from="E0" to="E16" end="1.00" number="0" type="standard" departPos="600" />
     <flow id="f_16" begin="0" from="E0" to="E16" end="1.00" number="1" type="standard" departPos="700" />
-    <flow id="f_17" begin="0" from="E0" to="E16" end="1.00" number="1" type="standard" departPos="800" /> 
-    <flow id="f_18" begin="0" from="E0" to="E16" end="1.00" number="1" type="standard" departPos="900" />
+    <flow id="f_17" begin="0" from="E0" to="E16" end="1.00" number="0" type="standard" departPos="800" /> 
+    <flow id="f_18" begin="0" from="E0" to="E16" end="1.00" number="0" type="standard" departPos="900" />
+    <flow id="f_19" begin="5" from="E0" to="E16" end="100" number="10" type="standard" departPos="0" />
+  
 </routes>

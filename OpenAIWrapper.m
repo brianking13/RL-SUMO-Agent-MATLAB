@@ -1,22 +1,27 @@
 % https://medium.com/analytics-vidhya/solving-openai-gym-environments-with-matlab-rl-toolbox-fb9d9e06b593
 
+
 classdef OpenAIWrapper < rl.env.MATLABEnvironment
 
   properties
-    open_env =  py.run_traci_from_matlab.VehEnv(true); 
+    open_env
     IsDone=false
   end
 
   methods
 
-    function this = OpenAIWrapper()
-        disp('OpenAIWrapper')
-      ObservationInfo = rlNumericSpec([7 1]);
-      ObservationInfo.Name = 'VehicleObservation';
+    function this = OpenAIWrapper(run_traci)
+        ObservationInfo = rlNumericSpec([7 1]);
+        ObservationInfo.Name = 'VehicleObservation';
 %       ObservationInfo.Description = 'Position, Velocity, Angle, VelocityAtTip';
-      ActionInfo = rlFiniteSetSpec([0:48]);
-      ActionInfo.Name = 'VelocityCommand';
-      this = this@rl.env.MATLABEnvironment(ObservationInfo, ActionInfo);
+        ActionInfo = rlFiniteSetSpec([0:48]);
+        ActionInfo.Name = 'VelocityCommand';
+        this = this@rl.env.MATLABEnvironment(ObservationInfo, ActionInfo);
+        disp('OpenAIWrapper')
+        if nargin < 1
+            run_traci = true;
+        end
+        this.open_env =  py.run_traci_from_matlab.VehEnv(run_traci);
     end
     
     function [Observation,Reward,IsDone,LoggedSignals] = step(this,Action)
@@ -48,7 +53,11 @@ classdef OpenAIWrapper < rl.env.MATLABEnvironment
     
     function [distance]=getDistance(this)
         distance=this.open_env.get_Distance();
-     end
+    end
+
+    function [sim_fc]=getSimFuelConsumption(this)
+        sim_fc=this.open_env.get_simFuelConsumption();
+    end
 
   end
 end

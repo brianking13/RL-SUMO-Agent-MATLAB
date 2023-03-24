@@ -5,7 +5,7 @@ Created on Tue Feb  7 16:28:42 2023
 @author: bking
 """
 
-from noTraffic_env import VehEnv
+from python_env import VehEnv
 import traci
 
 def run_veh(action):

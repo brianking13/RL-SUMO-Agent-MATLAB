@@ -1,15 +1,19 @@
 # -*- coding: utf-8 -*-
 """
-Created on Fri Nov 25 12:12:57 2022
-
-@author: bking
-"""
-
-# -*- coding: utf-8 -*-
-"""
 Created on Mon Nov 14 21:35:39 2022
 
 @author: bking
+
+This code is a Python script for a simulation environment of a traffic
+intersection. It uses the SUMO traffic simulation software, as well as a 
+reinforcement learning (RL) library called Gym. The environment is defined as 
+a class called VehEnv, which has a constructor that initializes the parameters 
+of the environment and an __init__ method that sets the action and observation 
+spaces. The step method is used to take a single step in the simulation and 
+update the state of the environment based on the action taken by the agent. 
+The InterStep method is a helper function used to gather data from the 
+simulation about the state of the intersection.
+
 """
 
 
@@ -22,24 +26,9 @@ import xml.etree.ElementTree as ET
 import os
 import numpy as np
 
-#imports for RL
+# imports for RL
 from gym import Env
 from gym.spaces import Discrete, Box
-
-
-
-# for i in range(1,20):
-#     traci.simulationStep()
-
-# tree = ET.parse('network1.net.xml')
-# root = tree.getroot()
-# for junctions in root.iter('junction'):
-#     if junctions.attrib['id'] == 'J1':
-#         print(junctions.attrib['x'])
-#         junctions.attrib['x'] = '10.00'
-#         print(junctions.attrib['x'])
-
-# tree.write('networkVariable.net.xml')    
 
 
 class VehEnv(Env):
@@ -50,7 +39,7 @@ class VehEnv(Env):
             self.action_space = Discrete(48)
             
             #observations
-            self.observation_space = Box(low=np.array([0,0,0,0,0]),high=np.array([1,1,1,1,1]))
+            self.observation_space = Box(low=np.array([0,0,0,0,0,0,0]),high=np.array([1,1,1,1,1,1,1]))
             
             # intialize parameters
             self.fuel_consumption = []
@@ -85,15 +74,34 @@ class VehEnv(Env):
            time = 0
            for i in range(1,5000):
                traci.simulationStep()
+               
+               # Gather fuel consumption data for all vehicles
+               self.simFuelConsumptions()
+               
                self.state, sec_reward, done, info,intersection = self.InterStep(action)
                time +=1
                if done == True:
                    break
+              
                # accumulate the reward over time
                reward = reward + sec_reward
                if intersection == True:
                    break
-         
+        
+        # find current and upcoming lane id's
+        current_lane = traci.vehicle.getLaneID('v_0')
+        
+        # find number of vehicles moving along upcoming stretch of corridor
+        number_vehicles_upcoming = traci.lane.getLastStepVehicleNumber(current_lane)-1
+        # find mean speed of vehicles moving along upcoming stretch of corridor
+        mean_lane_speed = traci.lane.getLastStepMeanSpeed(current_lane)
+        # print('Upcoming Lane Car Number',number_vehicles_upcoming)
+        # print('Lane Speed:', mean_lane_speed)
+        
+        self.state[len(self.state)-2] = number_vehicles_upcoming/20  
+        self.state[len(self.state)-1] = mean_lane_speed/20
+        
+        
         return self.state, reward/time, done, info
              
     
@@ -168,6 +176,7 @@ class VehEnv(Env):
         # find all positive gaps
         pos_intersection_distances = [i for i in intersection_distances if i > 0]
         
+  
         # find distance to closest intersection
         gap = min(pos_intersection_distances)
         
@@ -186,6 +195,8 @@ class VehEnv(Env):
             phase = 1
         
         previous_gap = self.state[1]*1000
+        
+        intersection = False
         if gap > previous_gap:
             # print('reached intersection')
             intersection = True
@@ -199,16 +210,16 @@ class VehEnv(Env):
         else:
             green_light_time = 1-phase_duration/60
 
-        self.state=[v/self.max_speed,gap/1000,phase_time/100,phase,green_light_time]
-
+        self.state=[v/self.max_speed,gap/1000,phase_time/100,phase,green_light_time,0,0]
+      
         # if self.sim_length <= 0 or vehicle_list == [] or traci.simulation.getTime() > 400:
         # when testing, set the sim to terminate at 8000 meters instead of at a red light
-        if gap < 15 and pos[0] > 8000:
-            print('MADE IT FAR!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-            self.reset()
-        if v < 5 and accel>0 :
-        # if  traci.simulation.getTime()>500:
-            done = True
+        # if gap < 15 and pos[0] > 8000:
+        #     print('MADE IT FAR!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+        #     # self.reset()
+        # if v < 5 and accel>0 :
+        if  traci.simulation.getTime()>500:
+            done = False
             # print("BOOTSTRAP HERE!!!!")
         else:
             done = False
@@ -218,6 +229,7 @@ class VehEnv(Env):
         info = {}
         
         return self.state, reward, done, info, intersection
+
     
     
     
@@ -247,6 +259,37 @@ class VehEnv(Env):
     def get_speeds(self):
         return self.speeds
     
+    # Returns fuel consumption for all vehicles in the simulation
+    def get_simFuelConsumption(self):
+        if self.sim_total_distance>0:
+            return self.sim_fuel_consumption/self.sim_total_distance
+        else:
+            return self.sim_fuel_consumption
+
+    # Adds fuel consumption at time step to total fuel consumption for all vehicles behind the ego vehicle
+    def simFuelConsumptions(self):
+        x = traci.vehicle.getIDList()
+        z = [y for y in x if y[:4]=='f_19' or y[:3]=='v_0']
+
+        # add up the fuel consumption per meter for all vehicles and divide it by the number of vehicles in the sim
+        fc = 0
+        distance= 0
+        for vehicle in z:
+            # distance = speed since time step is 1 second ([m/s]*[s]=[m])
+            distance += traci.vehicle.getSpeed(vehicle)
+            fc  += traci.vehicle.getFuelConsumption(vehicle)
+        
+        # Variables for fuel consumption of ego car
+        self.test_fc+=traci.vehicle.getFuelConsumption('v_0')
+        self.test_distance +=traci.vehicle.getSpeed('v_0')
+        
+        self.sim_fuel_consumption += fc/len(z)
+        self.sim_total_distance += distance/len(z)
+        
+    # Returns fuel consumption of ego car
+    def testFC(self):
+        return self.test_fc/self.test_distance      
+    
     def get_totalReward(self):
         return self.total_reward
     
@@ -270,6 +313,9 @@ class VehEnv(Env):
             traci.vehicle.setSpeed('v_0',set_speed)
             
         traci.simulationStep()
+        
+        # Gather fuel consumption data for all vehicles
+        self.simFuelConsumptions()
         
         fc=traci.vehicle.getFuelConsumption('v_0')
         accel = traci.vehicle.getAcceleration('v_0')
@@ -306,7 +352,7 @@ class VehEnv(Env):
             sumoBinary = checkBinary('sumo-gui') 
             
         # edit intersection positions after each episode
-        tree = ET.parse('customNetwork2.nod.xml')
+        tree = ET.parse('connectedCorridor.nod.xml')
         root = tree.getroot()
         for nodes in root.iter('nodes'):
             for intersection_num in range(1,17):
@@ -318,10 +364,10 @@ class VehEnv(Env):
                         # print(intersect)
                         node.attrib['x'] = str(intersect)
                         # print(node.attrib['x'])
-        tree.write('customNetwork2.nod.xml')  
+        tree.write('connectedCorridor.nod.xml')  
 
         # edit network timing after each episode
-        tree = ET.parse('customNetwork2.tll.xml')
+        tree = ET.parse('connectedCorridor.tll.xml')
         root = tree.getroot()
         for nodes in root.iter('tlLogics'):
             for logic in root.iter('tlLogic'):
@@ -336,15 +382,27 @@ class VehEnv(Env):
                         phase.attrib['duration'] = str(green)
                     elif phase.attrib['state'] == "rr":
                         phase.attrib['duration'] = str(red)
-        tree.write('customNetwork2.tll.xml')   
+        tree.write('connectedCorridor.tll.xml')   
                    
-     
-        os.system('netconvert --node-files=customNetwork2.nod.xml --edge-files=customNetwork2.edg.xml \
-                  --connection-files=customNetwork2.con.xml  \
-                      --tllogic-files=customNetwork2.tll.xml  \
-          --output-file=customNetwork2.net.xml')
+        # edit traffic demand each run
+        tree = ET.parse('connectedCorridor.rou.xml')
+        root = tree.getroot()
+        for nodes in root.iter('routes'):
+            for flow in root.iter('flow'):
+                # only applying random 0,1 to vehicles in front of ego, not behind (f_19)
+                if flow.attrib['id']!='f_19':
+                    number_cars =str(random.randint(0,1))
+                    # number_cars = "1"
+                    flow.attrib['number'] = number_cars
+        tree.write('connectedCorridor.rou.xml')
+        
+        
+        os.system('netconvert --node-files=connectedCorridor.nod.xml --edge-files=connectedCorridor.edg.xml \
+                  --connection-files=connectedCorridor.con.xml  \
+                      --tllogic-files=connectedCorridor.tll.xml  \
+          --output-file=connectedCorridor.net.xml')
           
-        traci.start([sumoBinary, "-n", "customNetwork2.net.xml", "-r", "routingLarge.rou.xml", "--start", "--quit-on-end"])
+        traci.start([sumoBinary, "-n", "connectedCorridor.net.xml", "-r", "connectedCorridor.rou.xml", "--start", "--quit-on-end"])
         
         
         traci.simulationStep()
@@ -364,17 +422,16 @@ class VehEnv(Env):
         self.max_speed = 40
         traci.vehicle.setMaxSpeed('v_0',self.max_speed)
         v = traci.vehicle.getSpeed('v_0')
-
-        self.state=[v/self.max_speed,0,0,0,0]
+        self.sim_fuel_consumption = 0
+        self.sim_total_distance = 0
+        
+        
+        self.test_fc=0
+        self.test_distance=0
+        
+        self.state=[v/self.max_speed,0,0,0,0,0,0]
         
         self.step(20)
 
         return self.state
     
-
-
-# visualizer = True
-# env = VehEnv(visualizer)
-# # [f,p,v] = env.step(10,0.01)
-# for i in range(1,20):
-#     env.step(20)
